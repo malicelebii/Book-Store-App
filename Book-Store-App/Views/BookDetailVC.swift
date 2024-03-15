@@ -53,8 +53,9 @@ class BookDetailVC: UIViewController {
     @IBAction func deleteButtonTapped(_ sender: Any) {
         let ac = UIAlertController(title: "Delete", message: "Are you sure to delete this book ?", preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { action in
+            let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
             self.bookDetailViewModel.deleteBook(id: self.bookId!) {
-                    self.bookDeletedDelegate?.didChangeData()
+                    self.bookDeletedDelegate?.didChangeData(indicator: indicator)
             }
         }
      
@@ -131,6 +132,7 @@ class BookDetailVC: UIViewController {
         default:
             let arr = [bookName, bookAuthor, bookYear]
             let updatedBook = Book(bookId: bookId!, bookName: textFields[0].text!, bookAuthor: textFields[1].text!, bookYear: Int(textFields[2].text!)!)
+            let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
             bookDetailViewModel.updateBook(book: updatedBook) {
                 DispatchQueue.main.async {
                     for (i,textField) in self.textFields.enumerated() {
@@ -140,7 +142,7 @@ class BookDetailVC: UIViewController {
                     }
                     self.editButton.setTitle("Edit", for: .normal)
                     self.cancelButton.isHidden = true
-                    self.bookDeletedDelegate?.didChangeData()
+                    self.bookDeletedDelegate?.didChangeData(indicator: indicator)
                 }
             }
             break

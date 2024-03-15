@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ChangeTableData {
-    func didChangeData()
+    func didChangeData(indicator: UIActivityIndicatorView)
 }
 
 class MainViewController: UIViewController, ChangeTableData {
@@ -26,16 +26,17 @@ class MainViewController: UIViewController, ChangeTableData {
         setUpCollectionViewLayout()
         searchBar.delegate = self
         
-       setBooksWith(goBack: false)
+        setBooksWith(goBack: false, indicator: IndicatorManager.shared.createActivityIndicator(view: view))
     }
     
-    func setBooksWith(goBack: Bool) {
+    func setBooksWith(goBack: Bool, indicator: UIActivityIndicatorView) {
         self.booksViewModel.getBooksWithImages(goBack: goBack) { books in
             self.books = books
             DispatchQueue.main.async(){
                 if goBack {
                     self.navigationController?.popViewController(animated: true)
                 }
+                indicator.stopAnimating()
                 self.booksCollectionView.reloadData()
             }
         }
@@ -60,8 +61,8 @@ class MainViewController: UIViewController, ChangeTableData {
         booksCollectionView.collectionViewLayout = layout
     }
     
-    func didChangeData() {
-       setBooksWith(goBack: true)
+    func didChangeData(indicator: UIActivityIndicatorView) {
+       setBooksWith(goBack: true,indicator: indicator)
     }
     
 }
@@ -102,15 +103,17 @@ extension MainViewController: UISearchBarDelegate {
         debouncer?.timer!.invalidate()
         debouncer = Debouncer(delay: 1) {
             guard searchText != "" else {
-                self.setBooksWith(goBack: false)
+                self.setBooksWith(goBack: false,indicator: IndicatorManager.shared.createActivityIndicator(view: self.view))
                 return
             }
             guard searchText.count > 2 else { return }
-            
+            let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
             self.booksViewModel.getBooksWithImages(goBack: false) { books in
                 self.searchViewModel.searchBooks(searchText: searchText,books: books) { searchedBooks in
                     self.books = searchedBooks
+                    
                     DispatchQueue.main.async {
+                        indicator.stopAnimating()
                         self.booksCollectionView.reloadData()
                     }
                 }

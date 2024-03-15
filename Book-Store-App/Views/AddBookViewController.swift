@@ -33,9 +33,10 @@ class AddBookViewController: UIViewController {
            let bookImageUrl = bookImageUrlTF.text {
             
             let newBook = Book(bookId: "",bookName: bookName, bookAuthor: bookAuthor, bookYear: bookYear, bookImageUrl: bookImageUrl)
+            let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
             addBookViewModel.saveBook(book: newBook){
                 DispatchQueue.main.async{
-                    self.delegate?.didChangeData()
+                    self.delegate?.didChangeData(indicator: indicator)
                 }
             }
         }
