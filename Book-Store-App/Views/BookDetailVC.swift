@@ -28,13 +28,15 @@ class BookDetailVC: UIViewController {
                 self.bookImage.image = bookImage
             }
         }
+        setupBook()
+    }
+    
+    func setupBook() {
         bookName.text = bookDetailViewModel.book?.bookName
         bookAuthor.text = "\(bookDetailViewModel.book!.bookAuthor)"
         bookYear.text = "\(bookDetailViewModel.book!.bookYear)"
         bookId = bookDetailViewModel.book?.bookId
-       
     }
- 
     
     @IBAction func deleteButtonTapped(_ sender: Any) {
         let ac = UIAlertController(title: "Delete", message: "Are you sure to delete this book ?", preferredStyle: .alert)
