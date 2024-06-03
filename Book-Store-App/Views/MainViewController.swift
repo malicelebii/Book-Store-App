@@ -21,12 +21,15 @@ class MainViewController: UIViewController, ChangeTableData {
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupProtocols()
+        setUpCollectionViewLayout()
+        setBooksWith(goBack: false, indicator: IndicatorManager.shared.createActivityIndicator(view: view))
+    }
+
+    func setupProtocols() {
         booksCollectionView.delegate = self
         booksCollectionView.dataSource = self
-        setUpCollectionViewLayout()
         searchBar.delegate = self
-        
-        setBooksWith(goBack: false, indicator: IndicatorManager.shared.createActivityIndicator(view: view))
     }
     
     func setBooksWith(goBack: Bool, indicator: UIActivityIndicatorView) {
