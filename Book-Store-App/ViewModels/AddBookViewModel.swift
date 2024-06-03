@@ -21,7 +21,7 @@ final class AddBookViewModel {
         }
         
         let _ = URLSession.shared.dataTask(with: request){ data,response,error in
-            if let data = data {
+            if data != nil {
                 completion()
             }
             
