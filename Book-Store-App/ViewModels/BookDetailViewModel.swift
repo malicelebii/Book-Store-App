@@ -13,23 +13,22 @@ class BookDetailViewModel {
     var bookImage: UIImage?
     
     func loadBook(completion: @escaping () -> Void ) {
-        if let book = book, let imageUrl = book.bookImageUrl {
-            URLSession.shared.dataTask(with: URLRequest(url: URL(string: imageUrl)!)) { data, response, error in
-                if let data = data {
+        if let book = book, let imageUrl = book.bookImageUrl, let url = URL(string: imageUrl) {
+            URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
+                guard let data = data else { return }
                   if let image = UIImage(data: data) {
                       self.bookImage = image
                       DispatchQueue.main.async {
                           completion()
                       }
                   }
-                }
             }.resume()
         }
     }
     
     func updateBook(book: Book, completion: @escaping () -> ()) {
-        let url = URL(string: "https://book-store-mern-backend.vercel.app/books/\(book.bookId)")
-        var request = URLRequest(url: url!)
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books/\(book.bookId)") else { return }
+        var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "PUT"
    
@@ -54,8 +53,8 @@ class BookDetailViewModel {
     }
     
     func deleteBook(id: String, completion: @escaping () -> ()) {
-        let url = URL(string: "https://book-store-mern-backend.vercel.app/books/\(id)")
-        var request = URLRequest(url: url!)
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books/\(id)") else { return }
+        var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "DELETE"
         

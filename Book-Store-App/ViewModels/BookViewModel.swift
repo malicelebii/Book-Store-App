@@ -33,9 +33,9 @@ class BookViewModel {
     }
     
     func getBooks(completion: @escaping ([Book]) -> Void) {
-        let url = URL(string: "https://book-store-mern-backend.vercel.app/books")
-        let request = URLRequest(url: url!)
-        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books") else { return }
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
                     let books = try JSONDecoder().decode([Book].self, from: data)

@@ -9,8 +9,8 @@ import UIKit
 
 final class AddBookViewModel {
     func saveBook(book: Book, completion: @escaping () -> Void) {
-        let url = URL(string: "https://book-store-mern-backend.vercel.app/books")
-        var request = URLRequest(url: url!)
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books") else { return }
+        var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
