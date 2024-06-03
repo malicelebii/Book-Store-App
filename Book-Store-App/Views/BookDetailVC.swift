@@ -69,25 +69,7 @@ class BookDetailVC: UIViewController {
         switch inEditMode {
         case true:
             for label in [bookName, bookAuthor, bookYear] {
-                let tf = UITextField()
-                tf.text = label!.text
-                tf.isHidden = false
-                tf.frame = label!.frame
-                tf.frame.size.width = 200
-                
-                tf.borderStyle = .roundedRect
-                label?.alpha = 0
-                
-                stackView.addSubview(tf)
-                
-                tf.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    tf.centerXAnchor.constraint(equalTo: label!.centerXAnchor),
-                    tf.centerYAnchor.constraint(equalTo: label!.centerYAnchor)
-                    
-                ])
-             
-                textFields.append(tf)
+                createTfForEditing(label: label)
             }
             cancelButton.isHidden = false
             editButton.setImage(nil, for: .normal)
@@ -111,6 +93,23 @@ class BookDetailVC: UIViewController {
             }
             break
         }
+    }
+    
+    func createTfForEditing(label: UILabel?) {
+        let tf = UITextField()
+        tf.text = label!.text
+        tf.isHidden = false
+        tf.frame = label!.frame
+        tf.frame.size.width = 200
+        tf.borderStyle = .roundedRect
+        label?.alpha = 0
+        stackView.addSubview(tf)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tf.centerXAnchor.constraint(equalTo: label!.centerXAnchor),
+            tf.centerYAnchor.constraint(equalTo: label!.centerYAnchor)
+        ])
+        textFields.append(tf)
     }
 }
 
