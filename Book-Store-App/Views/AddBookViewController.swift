@@ -8,23 +8,16 @@
 import UIKit
 
 class AddBookViewController: UIViewController {
-    
     var addBookViewModel = AddBookViewModel()
-    
     var delegate: ChangeTableData?
-    
     @IBOutlet weak var bookNameTF: UITextField!
-    
     @IBOutlet weak var bookAuthorTF: UITextField!
-    
     @IBOutlet weak var bookYearTF: UITextField!
-    
     @IBOutlet weak var bookImageUrlTF: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
     
     @IBAction func saveButtonTapped(_ sender: Any) {
         if let bookName = bookNameTF.text,

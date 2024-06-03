@@ -8,40 +8,26 @@
 import UIKit
 
 class BookDetailVC: UIViewController {
-    
     var bookDetailViewModel = BookDetailViewModel()
-    
     var bookDeletedDelegate: ChangeTableData?
-    
     @IBOutlet weak var bookImage: UIImageView!
-    
     @IBOutlet weak var bookName: UILabel!
-    
     @IBOutlet weak var bookAuthor: UILabel!
-    
     @IBOutlet weak var bookYear: UILabel!
-    
     @IBOutlet weak var stackView: UIStackView!
-    
     @IBOutlet weak var editButton: UIButton!
-    
     @IBOutlet weak var cancelButton: UIButton!
-    
     var inEditMode: Bool = false
-    
     var bookId: String?
-    
     var textFields: [UITextField] = [UITextField]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bookDetailViewModel.loadBook() {
             if let bookImage = self.bookDetailViewModel.bookImage {
                 self.bookImage.image = bookImage
             }
         }
-        
         bookName.text = bookDetailViewModel.book?.bookName
         bookAuthor.text = "\(bookDetailViewModel.book!.bookAuthor)"
         bookYear.text = "\(bookDetailViewModel.book!.bookYear)"
@@ -58,10 +44,8 @@ class BookDetailVC: UIViewController {
                     self.bookDeletedDelegate?.didChangeData(indicator: indicator)
             }
         }
-     
         ac.addAction(deleteAction)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
         present(ac,animated: true)
     }
     
@@ -147,7 +131,6 @@ class BookDetailVC: UIViewController {
             }
             break
         }
-  
     }
 }
 

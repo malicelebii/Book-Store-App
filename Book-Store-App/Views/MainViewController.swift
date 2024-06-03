@@ -53,7 +53,6 @@ class MainViewController: UIViewController, ChangeTableData {
         }
     }
     
-    
     func setUpCollectionViewLayout(){
         let layout =  UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -64,7 +63,6 @@ class MainViewController: UIViewController, ChangeTableData {
     func didChangeData(indicator: UIActivityIndicatorView) {
        setBooksWith(goBack: true,indicator: indicator)
     }
-    
 }
 
 extension MainViewController: UICollectionViewDelegate,UICollectionViewDataSource {
@@ -80,7 +78,6 @@ extension MainViewController: UICollectionViewDelegate,UICollectionViewDataSourc
         bookCell.bookYear.text = "\(self.books[indexPath.row].bookYear)"
         bookCell.bookImage.image = self.books[indexPath.row].bookImage
         bookCell.layer.borderWidth = 2
-        
         return bookCell
     }
     
@@ -88,14 +85,11 @@ extension MainViewController: UICollectionViewDelegate,UICollectionViewDataSourc
         let book = self.books[indexPath.row]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let detailsVC = storyboard.instantiateViewController(withIdentifier: "detailsVC") as! BookDetailVC
-        
         detailsVC.bookDetailViewModel.book = book
         detailsVC.bookDeletedDelegate = self
-        
         navigationController?.pushViewController(detailsVC, animated: true)
     }
 }
-
 
 var debouncer: Debouncer?
 extension MainViewController: UISearchBarDelegate {
@@ -111,7 +105,6 @@ extension MainViewController: UISearchBarDelegate {
             self.booksViewModel.getBooksWithImages(goBack: false) { books in
                 self.searchViewModel.searchBooks(searchText: searchText,books: books) { searchedBooks in
                     self.books = searchedBooks
-                    
                     DispatchQueue.main.async {
                         indicator.stopAnimating()
                         self.booksCollectionView.reloadData()

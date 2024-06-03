@@ -21,7 +21,6 @@ struct Book: Codable {
         case bookAuthor = "author"
         case bookYear = "publishYear"
         case bookImageUrl = "imageUrl"
-        
     }
 }
 

@@ -8,7 +8,7 @@
 import UIKit
 
 class BookViewModel {
-    func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ())   {
+    func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ()) {
         getBooks { books in
             Task{
                 let books = await self.fetchImage(books: books)
@@ -17,9 +17,8 @@ class BookViewModel {
         }
     }
  
-    func fetchImage(books: [Book]) async -> [Book]{
+    func fetchImage(books: [Book]) async -> [Book] {
         var copyBook: [Book] = books
-
         for (index,book) in books.enumerated() {
             let data = await getImageData(urlString: book.bookImageUrl ?? "")
             copyBook[index].bookImage = data
