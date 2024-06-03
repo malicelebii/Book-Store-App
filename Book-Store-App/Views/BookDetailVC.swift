@@ -50,28 +50,6 @@ class BookDetailVC: UIViewController {
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac,animated: true)
     }
-    
-    let tf = UITextField()
-    @objc func tapped(sender: UITapGestureRecognizer) {
-      
-        if let tappedLabel = sender.view as? UILabel {
-            tf.text = tappedLabel.text
-            tf.isHidden = false
-            tf.frame = tappedLabel.frame
-            tf.frame.size.width = 200
-            
-            tf.borderStyle = .roundedRect
-            bookName.alpha = 0
-            
-            stackView.addSubview(tf)
-            
-            tf.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                tf.centerXAnchor.constraint(equalTo: tappedLabel.centerXAnchor),
-                tf.centerYAnchor.constraint(equalTo: tappedLabel.centerYAnchor)
-            ])
-        }
-    }
    
     @IBAction func cancelButtonTapped(_ sender: UIButton) {
         inEditMode = false
