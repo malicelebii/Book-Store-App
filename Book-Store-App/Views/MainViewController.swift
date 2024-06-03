@@ -72,11 +72,8 @@ extension MainViewController: UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let bookCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bookCell", for: indexPath) as! BookCell
-        
-        bookCell.bookName.text = self.books[indexPath.row].bookName
-        bookCell.bookAuthor.text = "\(self.books[indexPath.row].bookAuthor)"
-        bookCell.bookYear.text = "\(self.books[indexPath.row].bookYear)"
-        bookCell.bookImage.image = self.books[indexPath.row].bookImage
+        let book = self.books[indexPath.row]
+        bookCell.configure(book: book)
         bookCell.layer.borderWidth = 2
         return bookCell
     }
