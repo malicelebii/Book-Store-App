@@ -27,19 +27,32 @@ class BookViewModel {
         }
     }
  
-    func fetchImage(books: [Book]) async -> [Book] {
+    func fetchImage(books: [Book]) async -> Result<[Book], Error> {
         var copyBook: [Book] = books
         for (index,book) in books.enumerated() {
             let data = await getImageData(urlString: book.bookImageUrl ?? "")
-            copyBook[index].bookImage = data
+            switch data {
+            case .success(let image):
+                copyBook[index].bookImage = image
+            case .failure(let error):
+                return .failure(error)
+            }
         }
-        return copyBook
+        return .success(copyBook)
     }
     
-    func getImageData(urlString: String) async -> UIImage? {
-        guard let url = URL(string: urlString) else { return nil }
-        guard let (imageData,_) =  try? await URLSession.shared.data(from: url) else { return  nil }
-        return UIImage(data: imageData)
+    func getImageData(urlString: String) async -> Result<UIImage?, NetworkError> {
+        guard let url = URL(string: urlString) else { return .failure(.invalidUrl) }
+        do {
+            let (imageData,_) =  try await URLSession.shared.data(from: url)
+            if let image = UIImage(data: imageData) {
+                return .success(image)
+            } else {
+                return .failure(.invalidUrl)
+            }
+        } catch  {
+            return .failure(.noData)
+        }
     }
     
     func getBooks(completion: @escaping (Result<[Book],NetworkError>) -> Void) {
