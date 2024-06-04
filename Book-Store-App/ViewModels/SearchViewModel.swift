@@ -8,10 +8,10 @@
 import Foundation
 
 final class SearchViewModel {
-    func searchBooks(searchText: String, books:[Book], completion: @escaping ([Book]) -> ()) {
+    func searchBooks(searchText: String, books:[Book], completion: @escaping (Result<[Book], Error>) -> ()) {
         let searchedBooks = books.filter { book -> Bool in
-            return book.bookName.lowercased().contains(searchText.lowercased())
+             book.bookName.lowercased().contains(searchText.lowercased())
         }
-        completion(searchedBooks)
+        completion(.success(searchedBooks))
     }
 }

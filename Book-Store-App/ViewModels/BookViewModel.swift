@@ -8,16 +8,21 @@
 import UIKit
 
 class BookViewModel {
-    func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ()) {
+    func getBooksWithImages(goBack: Bool,completion: @escaping (Result<[Book], Error>) -> ()) {
         getBooks { result in
             switch result {
             case .success(let books):
                 Task{
                     let books = await self.fetchImage(books: books)
-                    completion(books)
+                    switch books {
+                    case .success(let books):
+                        completion(.success(books))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
                 }
             case .failure(let networkError):
-                print(networkError)
+                completion(.failure(NetworkError.noData))
             }
         }
     }
