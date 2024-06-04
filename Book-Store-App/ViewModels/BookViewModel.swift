@@ -9,10 +9,15 @@ import UIKit
 
 class BookViewModel {
     func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ()) {
-        getBooks { books in
-            Task{
-                let books = await self.fetchImage(books: books)
-                completion(books)
+        getBooks { result in
+            switch result {
+            case .success(let books):
+                Task{
+                    let books = await self.fetchImage(books: books)
+                    completion(books)
+                }
+            case .failure(let networkError):
+                print(networkError)
             }
         }
     }
@@ -32,17 +37,23 @@ class BookViewModel {
         return UIImage(data: imageData)
     }
     
-    func getBooks(completion: @escaping ([Book]) -> Void) {
-        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books") else { return }
+    func getBooks(completion: @escaping (Result<[Book],NetworkError>) -> Void) {
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books") else { completion(.failure(.invalidUrl))
+            return
+        }
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
                     let books = try JSONDecoder().decode([Book].self, from: data)
-                    completion(books)
+                    completion(.success(books))
                 } catch  {
-                    print(error)
+                    completion(.failure(.decodingError))
                 }
+            }
+            
+            if error != nil {
+                completion(.failure(.noData))
             }
         }
         task.resume()
