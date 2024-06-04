@@ -8,7 +8,7 @@
 import UIKit
 
 class BookViewModel {
-    func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ())   {
+    func getBooksWithImages(goBack: Bool,completion: @escaping ([Book]) -> ()) {
         getBooks { books in
             Task{
                 let books = await self.fetchImage(books: books)
@@ -17,9 +17,8 @@ class BookViewModel {
         }
     }
  
-    func fetchImage(books: [Book]) async -> [Book]{
+    func fetchImage(books: [Book]) async -> [Book] {
         var copyBook: [Book] = books
-
         for (index,book) in books.enumerated() {
             let data = await getImageData(urlString: book.bookImageUrl ?? "")
             copyBook[index].bookImage = data
@@ -34,9 +33,9 @@ class BookViewModel {
     }
     
     func getBooks(completion: @escaping ([Book]) -> Void) {
-        let url = URL(string: "https://book-store-mern-backend.vercel.app/books")
-        let request = URLRequest(url: url!)
-        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+        guard let url = URL(string: "https://book-store-mern-backend.vercel.app/books") else { return }
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
                     let books = try JSONDecoder().decode([Book].self, from: data)

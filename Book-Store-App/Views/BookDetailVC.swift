@@ -8,83 +8,49 @@
 import UIKit
 
 class BookDetailVC: UIViewController {
-    
     var bookDetailViewModel = BookDetailViewModel()
-    
     var bookDeletedDelegate: ChangeTableData?
-    
     @IBOutlet weak var bookImage: UIImageView!
-    
     @IBOutlet weak var bookName: UILabel!
-    
     @IBOutlet weak var bookAuthor: UILabel!
-    
     @IBOutlet weak var bookYear: UILabel!
-    
     @IBOutlet weak var stackView: UIStackView!
-    
     @IBOutlet weak var editButton: UIButton!
-    
     @IBOutlet weak var cancelButton: UIButton!
-    
     var inEditMode: Bool = false
-    
     var bookId: String?
-    
     var textFields: [UITextField] = [UITextField]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bookDetailViewModel.loadBook() {
             if let bookImage = self.bookDetailViewModel.bookImage {
                 self.bookImage.image = bookImage
             }
         }
-        
+        setupBook()
+    }
+    
+    func setupBook() {
         bookName.text = bookDetailViewModel.book?.bookName
         bookAuthor.text = "\(bookDetailViewModel.book!.bookAuthor)"
         bookYear.text = "\(bookDetailViewModel.book!.bookYear)"
         bookId = bookDetailViewModel.book?.bookId
-       
     }
- 
     
     @IBAction func deleteButtonTapped(_ sender: Any) {
         let ac = UIAlertController(title: "Delete", message: "Are you sure to delete this book ?", preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { action in
             let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
-            self.bookDetailViewModel.deleteBook(id: self.bookId!) {
-                    self.bookDeletedDelegate?.didChangeData(indicator: indicator)
+            if let id = self.bookId {
+                self.bookDetailViewModel.deleteBook(id: id) {
+                        self.bookDeletedDelegate?.didChangeData(indicator: indicator)
+                }
             }
         }
-     
         ac.addAction(deleteAction)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
         present(ac,animated: true)
-    }
-    
-    let tf = UITextField()
-    @objc func tapped(sender: UITapGestureRecognizer) {
-      
-        if let tappedLabel = sender.view as? UILabel {
-            tf.text = tappedLabel.text
-            tf.isHidden = false
-            tf.frame = tappedLabel.frame
-            tf.frame.size.width = 200
-            
-            tf.borderStyle = .roundedRect
-            bookName.alpha = 0
-            
-            stackView.addSubview(tf)
-            
-            tf.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                tf.centerXAnchor.constraint(equalTo: tappedLabel.centerXAnchor),
-                tf.centerYAnchor.constraint(equalTo: tappedLabel.centerYAnchor)
-            ])
-        }
     }
    
     @IBAction func cancelButtonTapped(_ sender: UIButton) {
@@ -105,25 +71,7 @@ class BookDetailVC: UIViewController {
         switch inEditMode {
         case true:
             for label in [bookName, bookAuthor, bookYear] {
-                let tf = UITextField()
-                tf.text = label!.text
-                tf.isHidden = false
-                tf.frame = label!.frame
-                tf.frame.size.width = 200
-                
-                tf.borderStyle = .roundedRect
-                label?.alpha = 0
-                
-                stackView.addSubview(tf)
-                
-                tf.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    tf.centerXAnchor.constraint(equalTo: label!.centerXAnchor),
-                    tf.centerYAnchor.constraint(equalTo: label!.centerYAnchor)
-                    
-                ])
-             
-                textFields.append(tf)
+                createTfForEditing(label: label)
             }
             cancelButton.isHidden = false
             editButton.setImage(nil, for: .normal)
@@ -131,23 +79,45 @@ class BookDetailVC: UIViewController {
             break
         default:
             let arr = [bookName, bookAuthor, bookYear]
-            let updatedBook = Book(bookId: bookId!, bookName: textFields[0].text!, bookAuthor: textFields[1].text!, bookYear: Int(textFields[2].text!)!)
+            var updatedBook: Book?
+        
+            if let id = bookId, let name = textFields[0].text, let author = textFields[1].text, let year = Int(textFields[2].text ?? "0") {
+                updatedBook = Book(bookId: id, bookName: name, bookAuthor: author, bookYear: year)
+            }
             let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
-            bookDetailViewModel.updateBook(book: updatedBook) {
-                DispatchQueue.main.async {
-                    for (i,textField) in self.textFields.enumerated() {
-                        arr[i]?.text = textField.text
-                        arr[i]?.alpha = 1
-                        textField.isHidden = true
+            if let updatedBook = updatedBook {
+                bookDetailViewModel.updateBook(book: updatedBook) {
+                    DispatchQueue.main.async {
+                        for (i,textField) in self.textFields.enumerated() {
+                            arr[i]?.text = textField.text
+                            arr[i]?.alpha = 1
+                            textField.isHidden = true
+                        }
+                        self.editButton.setTitle("Edit", for: .normal)
+                        self.cancelButton.isHidden = true
+                        self.bookDeletedDelegate?.didChangeData(indicator: indicator)
                     }
-                    self.editButton.setTitle("Edit", for: .normal)
-                    self.cancelButton.isHidden = true
-                    self.bookDeletedDelegate?.didChangeData(indicator: indicator)
                 }
             }
             break
         }
-  
+    }
+    
+    func createTfForEditing(label: UILabel?) {
+        let tf = UITextField()
+        tf.text = label!.text
+        tf.isHidden = false
+        tf.frame = label!.frame
+        tf.frame.size.width = 200
+        tf.borderStyle = .roundedRect
+        label?.alpha = 0
+        stackView.addSubview(tf)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tf.centerXAnchor.constraint(equalTo: label!.centerXAnchor),
+            tf.centerYAnchor.constraint(equalTo: label!.centerYAnchor)
+        ])
+        textFields.append(tf)
     }
 }
 
