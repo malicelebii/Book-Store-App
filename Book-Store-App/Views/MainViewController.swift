@@ -33,8 +33,13 @@ class MainViewController: UIViewController, ChangeTableData {
     }
     
     func setBooksWith(goBack: Bool, indicator: UIActivityIndicatorView) {
-        self.booksViewModel.getBooksWithImages(goBack: goBack) { books in
-            self.books = books
+        self.booksViewModel.getBooksWithImages(goBack: goBack) { result in
+            switch result {
+            case .success(let books):
+                self.books = books
+            case .failure(let error):
+                print(error)
+            }
             DispatchQueue.main.async(){
                 if goBack {
                     self.navigationController?.popViewController(animated: true)
@@ -102,9 +107,21 @@ extension MainViewController: UISearchBarDelegate {
             }
             guard searchText.count > 2 else { return }
             let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
-            self.booksViewModel.getBooksWithImages(goBack: false) { books in
-                self.searchViewModel.searchBooks(searchText: searchText,books: books) { searchedBooks in
-                    self.books = searchedBooks
+            self.booksViewModel.getBooksWithImages(goBack: false) { result in
+                switch result {
+                case .success(let books):
+                    self.searchViewModel.searchBooks(searchText: searchText,books: books) { result in
+                        switch result {
+                        case .success(let searchedBooks):
+                            self.books = searchedBooks
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            
                     DispatchQueue.main.async {
                         indicator.stopAnimating()
                         self.booksCollectionView.reloadData()
@@ -112,7 +129,6 @@ extension MainViewController: UISearchBarDelegate {
                 }
             }
             
-        }
         debouncer?.call()
     }
 }

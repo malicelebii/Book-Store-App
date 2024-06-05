@@ -23,6 +23,7 @@
 		35DBFA262B9C70E6003566F2 /* AddBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DBFA252B9C70E6003566F2 /* AddBookViewModel.swift */; };
 		35E1D6C12BA034A50049214A /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E1D6C02BA034A50049214A /* SearchViewModel.swift */; };
 		35E1D6C32BA0414B0049214A /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E1D6C22BA0414B0049214A /* Debouncer.swift */; };
+		35F69B312C0F4ADC0045615F /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F69B302C0F4ADC0045615F /* NetworkError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		35DBFA252B9C70E6003566F2 /* AddBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookViewModel.swift; sourceTree = "<group>"; };
 		35E1D6C02BA034A50049214A /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		35E1D6C22BA0414B0049214A /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
+		35F69B302C0F4ADC0045615F /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		35AE5E182B9AE9F3006A3E40 /* Book-Store-App */ = {
 			isa = PBXGroup;
 			children = (
+				35F69B2F2C0F4AC60045615F /* Enums */,
 				359F4FD12B9B046B00577331 /* ViewModels */,
 				35AE5E2E2B9AEAA2006A3E40 /* Views */,
 				35AE5E2D2B9AEA98006A3E40 /* Models */,
@@ -119,6 +122,14 @@
 				35DBFA232B9C70D6003566F2 /* AddBookViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		35F69B2F2C0F4AC60045615F /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				35F69B302C0F4ADC0045615F /* NetworkError.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35E1D6C12BA034A50049214A /* SearchViewModel.swift in Sources */,
+				35F69B312C0F4ADC0045615F /* NetworkError.swift in Sources */,
 				35AE5E302B9AEAC5006A3E40 /* BookCell.swift in Sources */,
 				359F4FD32B9B048B00577331 /* BookViewModel.swift in Sources */,
 				35AE5E1E2B9AE9F3006A3E40 /* MainViewController.swift in Sources */,
