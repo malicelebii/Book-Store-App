@@ -17,6 +17,7 @@
 		35AE5E262B9AE9F4006A3E40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35AE5E242B9AE9F4006A3E40 /* LaunchScreen.storyboard */; };
 		35AE5E302B9AEAC5006A3E40 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AE5E2F2B9AEAC5006A3E40 /* BookCell.swift */; };
 		35BF50872BA1E37B00B7BF9F /* IndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BF50862BA1E37B00B7BF9F /* IndicatorManager.swift */; };
+		35DBB9BF2C1B72550050BE74 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DBB9BE2C1B72550050BE74 /* NetworkManager.swift */; };
 		35DBFA202B9C6732003566F2 /* BookDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DBFA1F2B9C6732003566F2 /* BookDetailVC.swift */; };
 		35DBFA222B9C6C2E003566F2 /* BookDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DBFA212B9C6C2E003566F2 /* BookDetailViewModel.swift */; };
 		35DBFA242B9C70D6003566F2 /* AddBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DBFA232B9C70D6003566F2 /* AddBookViewController.swift */; };
@@ -39,6 +40,7 @@
 		35AE5E272B9AE9F4006A3E40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35AE5E2F2B9AEAC5006A3E40 /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		35BF50862BA1E37B00B7BF9F /* IndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorManager.swift; sourceTree = "<group>"; };
+		35DBB9BE2C1B72550050BE74 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		35DBFA1F2B9C6732003566F2 /* BookDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailVC.swift; sourceTree = "<group>"; };
 		35DBFA212B9C6C2E003566F2 /* BookDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewModel.swift; sourceTree = "<group>"; };
 		35DBFA232B9C70D6003566F2 /* AddBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		35AE5E182B9AE9F3006A3E40 /* Book-Store-App */ = {
 			isa = PBXGroup;
 			children = (
+				35DBB9BD2C1B72420050BE74 /* Service */,
 				35F69B2F2C0F4AC60045615F /* Enums */,
 				359F4FD12B9B046B00577331 /* ViewModels */,
 				35AE5E2E2B9AEAA2006A3E40 /* Views */,
@@ -122,6 +125,14 @@
 				35DBFA232B9C70D6003566F2 /* AddBookViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		35DBB9BD2C1B72420050BE74 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				35DBB9BE2C1B72550050BE74 /* NetworkManager.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		35F69B2F2C0F4AC60045615F /* Enums */ = {
@@ -215,6 +226,7 @@
 				359F4FD02B9AFE7600577331 /* Book.swift in Sources */,
 				35DBFA222B9C6C2E003566F2 /* BookDetailViewModel.swift in Sources */,
 				35DBFA242B9C70D6003566F2 /* AddBookViewController.swift in Sources */,
+				35DBB9BF2C1B72550050BE74 /* NetworkManager.swift in Sources */,
 				35AE5E1C2B9AE9F3006A3E40 /* SceneDelegate.swift in Sources */,
 				35BF50872BA1E37B00B7BF9F /* IndicatorManager.swift in Sources */,
 			);
