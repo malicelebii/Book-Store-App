@@ -23,17 +23,17 @@ class BookViewModel {
         return copyBook
     }
     
-    func getImageData(urlString: String) async -> Result<UIImage?, NetworkError> {
-        guard let url = URL(string: urlString) else { return .failure(.invalidUrl) }
+    func getImageData(urlString: String) async throws -> UIImage? {
+        guard let url = URL(string: urlString) else { throw NetworkError.invalidUrl }
         do {
             let (imageData,_) =  try await URLSession.shared.data(from: url)
             if let image = UIImage(data: imageData) {
-                return .success(image)
+                return image
             } else {
-                return .failure(.invalidUrl)
+                throw NetworkError.invalidUrl
             }
         } catch  {
-            return .failure(.noData)
+            throw NetworkError.noData
         }
     }
     
