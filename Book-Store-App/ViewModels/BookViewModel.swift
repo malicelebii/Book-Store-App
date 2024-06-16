@@ -14,18 +14,13 @@ class BookViewModel {
             return booksWithImages
     }
  
-    func fetchImage(books: [Book]) async -> Result<[Book], Error> {
+    func fetchImage(books: [Book]) async -> [Book] {
         var copyBook: [Book] = books
         for (index,book) in books.enumerated() {
-            let data = await getImageData(urlString: book.bookImageUrl ?? "")
-            switch data {
-            case .success(let image):
-                copyBook[index].bookImage = image
-            case .failure(let error):
-                return .failure(error)
-            }
+            let data = try? await getImageData(urlString: book.bookImageUrl ?? "")
+            copyBook[index].bookImage = data
         }
-        return .success(copyBook)
+        return copyBook
     }
     
     func getImageData(urlString: String) async -> Result<UIImage?, NetworkError> {
