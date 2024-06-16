@@ -8,54 +8,42 @@
 import UIKit
 
 class BookViewModel {
-    func getBooksWithImages(goBack: Bool,completion: @escaping (Result<[Book], Error>) -> ()) {
-        getBooks { result in
-            switch result {
-            case .success(let books):
-                Task{
-                    let books = await self.fetchImage(books: books)
-                    switch books {
-                    case .success(let books):
-                        completion(.success(books))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let networkError):
-                completion(.failure(NetworkError.noData))
-            }
-        }
+    func getBooksWithImages(goBack: Bool) async -> [Book] {
+            let books = await getBooks()
+            let booksWithImages = await self.fetchImage(books: books)
+            return booksWithImages
     }
  
-    func fetchImage(books: [Book]) async -> Result<[Book], Error> {
+    func fetchImage(books: [Book]) async -> [Book] {
         var copyBook: [Book] = books
         for (index,book) in books.enumerated() {
-            let data = await getImageData(urlString: book.bookImageUrl ?? "")
-            switch data {
-            case .success(let image):
-                copyBook[index].bookImage = image
-            case .failure(let error):
-                return .failure(error)
-            }
+            let data = try? await getImageData(urlString: book.bookImageUrl ?? "")
+            copyBook[index].bookImage = data
         }
-        return .success(copyBook)
+        return copyBook
     }
     
-    func getImageData(urlString: String) async -> Result<UIImage?, NetworkError> {
-        guard let url = URL(string: urlString) else { return .failure(.invalidUrl) }
+    func getImageData(urlString: String) async throws -> UIImage? {
+        guard let url = URL(string: urlString) else { throw NetworkError.invalidUrl }
         do {
             let (imageData,_) =  try await URLSession.shared.data(from: url)
             if let image = UIImage(data: imageData) {
-                return .success(image)
+                return image
             } else {
-                return .failure(.invalidUrl)
+                throw NetworkError.invalidUrl
             }
         } catch  {
-            return .failure(.noData)
+            throw NetworkError.noData
         }
     }
     
-    func getBooks(completion: @escaping (Result<[Book],NetworkError>) -> Void) async throws -> [Book] {
-//        NetworkManager.shared.getBooks()
+    func getBooks() async -> [Book] {
+        var books = [Book]()
+        do {
+            books = try await NetworkManager.shared.getBooks()
+        } catch {
+            print(NetworkError.noData)
+        }
+        return books
     }
 }
