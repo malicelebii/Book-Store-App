@@ -37,7 +37,13 @@ class BookViewModel {
         }
     }
     
-    func getBooks(completion: @escaping (Result<[Book],NetworkError>) -> Void) async throws -> [Book] {
-//        NetworkManager.shared.getBooks()
+    func getBooks() async -> [Book] {
+        var books = [Book]()
+        do {
+            books = try await NetworkManager.shared.getBooks()
+        } catch {
+            print(NetworkError.noData)
+        }
+        return books
     }
 }
