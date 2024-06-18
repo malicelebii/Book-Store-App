@@ -33,13 +33,9 @@ class MainViewController: UIViewController, ChangeTableData {
     }
     
     func setBooksWith(goBack: Bool, indicator: UIActivityIndicatorView) {
-        self.booksViewModel.getBooksWithImages(goBack: goBack) { result in
-            switch result {
-            case .success(let books):
-                self.books = books
-            case .failure(let error):
-                print(error)
-            }
+        Task {
+            let booksWithImages = await self.booksViewModel.getBooksWithImages(goBack: goBack)
+            self.books = booksWithImages
             DispatchQueue.main.async(){
                 if goBack {
                     self.navigationController?.popViewController(animated: true)
