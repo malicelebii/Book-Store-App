@@ -103,26 +103,23 @@ extension MainViewController: UISearchBarDelegate {
             }
             guard searchText.count > 2 else { return }
             let indicator = IndicatorManager.shared.createActivityIndicator(view: self.view)
-            self.booksViewModel.getBooksWithImages(goBack: false) { result in
-                switch result {
-                case .success(let books):
-                    self.searchViewModel.searchBooks(searchText: searchText,books: books) { result in
-                        switch result {
-                        case .success(let searchedBooks):
-                            self.books = searchedBooks
-                        case .failure(let error):
-                            print(error)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            
-                    DispatchQueue.main.async {
-                        indicator.stopAnimating()
-                        self.booksCollectionView.reloadData()
+            Task {
+                let getBooksWithImages = await self.booksViewModel.getBooksWithImages(goBack: false)
+                self.searchViewModel.searchBooks(searchText: searchText, books: getBooksWithImages) { result in
+                    switch result {
+                    case .success(let searchedBooks):
+                        self.books = searchedBooks
+                        break
+                    case .failure(let error):
+                        print(error)
+                        break
                     }
                 }
+                DispatchQueue.main.async {
+                    indicator.stopAnimating()
+                    self.booksCollectionView.reloadData()
+                }
+            }
             }
             
         debouncer?.call()
